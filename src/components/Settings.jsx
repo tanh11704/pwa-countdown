@@ -91,6 +91,30 @@ const Settings = ({ theme, onThemeChange, events, setEvents }) => {
       </div>
 
       <div className="bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-lg">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4">
+          Notifications
+        </h3>
+        <button
+          onClick={async () => {
+            if (Notification.permission !== "granted") {
+              const p = await Notification.requestPermission();
+              if (p !== "granted") return;
+            }
+            const reg = await navigator.serviceWorker?.ready;
+            await reg?.showNotification?.("Test notification", {
+              body: "It works!",
+            });
+          }}
+          className="w-full px-4 py-3 rounded-xl border-2 border-blue-500 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+        >
+          Send Test Notification
+        </button>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+          Nếu không thấy thông báo, kiểm tra quyền/HTTPS/PWA đã cài.
+        </p>
+      </div>
+
+      <div className="bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-lg">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-2">
           About
         </h3>

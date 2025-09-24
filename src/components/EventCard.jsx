@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useEffect } from "react";
-import { formatCountdown, showNotification } from "../utils/helper";
+import { formatCountdown } from "../utils/helper";
 import { CATEGORIES } from "../constants/constans";
 
 const EventCard = ({ event, onEdit, onDelete, onClick }) => {
@@ -13,16 +13,7 @@ const EventCard = ({ event, onEdit, onDelete, onClick }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const newCountdown = formatCountdown(event.date);
-      setCountdown(newCountdown);
-
-      if (newCountdown.isExpired && !event.notified) {
-        showNotification(`🎉 ${event.name}`, {
-          body: "Your event is happening now!",
-          tag: `event-${event.id}`,
-        });
-        event.notified = true;
-      }
+      setCountdown(formatCountdown(event.date));
     }, 1000);
 
     return () => clearInterval(interval);

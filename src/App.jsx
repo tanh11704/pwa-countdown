@@ -12,8 +12,10 @@ import Modal from "./components/Modal";
 import EventForm from "./components/EventForm";
 import CountdownDisplay from "./components/CountdownDisplay";
 import { getEventsFromDB, saveEventsToDB } from "./utils/db";
+import { useLocalScheduler } from "./hooks/useLocalScheduler";
 
 function App() {
+  useLocalScheduler(true);
   const [events, setEvents] = useState([]);
   const [theme, setTheme] = useTheme();
   const [activeTab, setActiveTab] = useState("home");
@@ -61,6 +63,16 @@ function App() {
 
     setEvents(updatedEvents);
     await saveEventsToDB(updatedEvents);
+
+    if (eventData.notifications) {
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        reg.active?.postMessage({
+          type: "SCHEDULE_NOTIFICATION",
+          event: eventData,
+        });
+      } catch (e) {}
+    }
 
     setIsModalOpen(false);
     setEditingEvent(null);

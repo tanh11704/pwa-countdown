@@ -29,3 +29,10 @@ export async function saveEventsToDB(events) {
   }
   await tx.done;
 }
+
+export async function updateEventInDB(event) {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  await tx.objectStore(STORE_NAME).put(event);
+  await tx.done;
+}

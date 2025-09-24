@@ -29,18 +29,3 @@ export const requestNotificationPermission = async () => {
 
   return false;
 };
-
-export const showNotification = (title, options = {}) => {
-  if ("serviceWorker" in navigator && Notification.permission === "granted") {
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.showNotification(title, {
-        body: options.body,
-        icon: "/vite.svg",
-        badge: "/vite.svg",
-        tag: "countdown-notification",
-        requireInteraction: true,
-        ...options,
-      });
-    });
-  }
-};
